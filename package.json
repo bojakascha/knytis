@@ -20,7 +20,7 @@
   "bugs": {
     "url": "https://github.com/bojakascha/knytis/issues"
   },
-  "homepage": "https://bojakascha.github.io/knytis/",
+  "homepage": "https://knytis.ehdwall.se/",
   "dependencies": {
     "firebase": "^12.11.0",
     "qrcode": "^1.5.4",
