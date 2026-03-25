@@ -1,0 +1,207 @@
+export type Locale = 'sv' | 'en';
+
+function defineMessages<T extends Record<string, string>>(en: T, sv: Record<keyof T, string>) {
+  return { en, sv };
+}
+
+export const { en: enMessages, sv: svMessages } = defineMessages(
+  {
+    'common.loading': 'Loading...',
+    'common.oneMoment': 'One moment...',
+    'common.notFound': 'Not found',
+    'common.tryAnotherCode': 'Try another code',
+    'common.back': 'Back',
+    'common.cancel': 'Cancel',
+    'common.save': 'Save',
+    'common.add': 'Add',
+    'common.sure': 'Sure?',
+    'common.copied': 'Copied',
+    'common.copy': 'Copy',
+    'common.unknown': 'Unknown',
+
+    'home.createHeading': 'Create a new occasion',
+    'home.occasionLabel': "What's the occasion?",
+    'home.occasionPlaceholder': 'e.g. Friday Potluck',
+    'home.dateOptional': 'Date (optional)',
+    'home.timeOptional': 'Time (optional)',
+    'home.yourName': 'Your name',
+    'home.namePlaceholder': 'e.g. Mel',
+    'home.creating': 'Creating...',
+    'home.create': 'Create',
+    'home.createError': 'Could not create the occasion. Please try again.',
+    'home.untitledOccasion': 'Untitled occasion',
+    'home.joinHeading': 'Join with a code',
+    'home.joinPlaceholder': 'e.g. ABC123',
+    'home.join': 'Join',
+
+    'join.title': 'Join an occasion',
+    'join.code': 'Code',
+    'join.codePlaceholder': 'e.g. DEMO42',
+    'join.noOccasionForCode': 'No occasion found for this code.',
+    'join.enterCodeAndName': 'Enter both a code and your name.',
+    'join.noOccasionFound': 'No occasion found for that code.',
+    'join.couldNotJoin': 'Could not join. Please try again.',
+    'join.iAm': 'I am...',
+    'join.someoneElse': 'Someone else',
+    'join.joining': 'Joining...',
+    'join.join': 'Join',
+
+    'occasion.inviteAria': 'Invite people',
+
+    'notFound.title': 'Page not found',
+    'notFound.subtitle': 'The route does not exist in the current app scaffold.',
+    'notFound.returnHome': 'Return home',
+
+    'contrib.sortParticipant': 'Name',
+    'contrib.sortItem': 'Item',
+    'contrib.notes': 'Notes',
+    'contrib.empty': 'No items yet — add the first one below.',
+    'contrib.notesPlaceholder': 'Notes',
+    'contrib.notesOptional': 'Notes (optional)',
+    'contrib.itemPlaceholder': 'Item...',
+    'contrib.adding': '...',
+    'contrib.addingFor': 'Adding for {{name}}',
+    'contrib.you': 'You',
+    'contrib.youTag': '(you)',
+    'contrib.addForSomeoneTitle': 'Click to add for someone else',
+    'contrib.saveTitle': 'Save',
+    'contrib.cancelTitle': 'Cancel',
+    'contrib.editTitle': 'Edit',
+    'contrib.deleteTitle': 'Delete',
+    'contrib.deleteConfirmTitle': 'Click again to confirm',
+
+    'addPerson.toggle': 'Add person',
+    'addPerson.namePlaceholder': 'Name...',
+    'addPerson.add': 'Add',
+    'addPerson.cancel': 'Cancel',
+
+    'participant.sectionLabel': 'Participants',
+    'participant.joined': '{{count}} joined',
+    'participant.ready': 'Ready to contribute',
+
+    'suggestion.sectionLabel': 'Suggestions',
+    'suggestion.heading': 'Anonymous ideas',
+    'suggestion.placeholder': 'Maybe someone could bring ice',
+    'suggestion.suggest': 'Suggest',
+    'suggestion.empty': 'No suggestions yet.',
+
+    'invite.title': 'Invite people',
+    'invite.closeAria': 'Close',
+    'invite.hint': 'Scan to join, or share the link below',
+    'invite.orManual': 'Or enter code manually:',
+
+    'switcher.title': 'Switch occasion',
+    'switcher.label': 'Your occasions',
+    'switcher.newOrJoin': 'New or join...',
+
+    'language.ariaSv': 'Swedish',
+    'language.ariaEn': 'English',
+    'language.switchLabel': 'Language',
+
+    'meta.description':
+      'Knytis helps groups coordinate food and drink contributions for a get-together.',
+  },
+  {
+    'common.loading': 'Laddar...',
+    'common.oneMoment': 'Ett ögonblick...',
+    'common.notFound': 'Hittades inte',
+    'common.tryAnotherCode': 'Prova en annan kod',
+    'common.back': 'Tillbaka',
+    'common.cancel': 'Avbryt',
+    'common.save': 'Spara',
+    'common.add': 'Lägg till',
+    'common.sure': 'Säker?',
+    'common.copied': 'Kopierat',
+    'common.copy': 'Kopiera',
+    'common.unknown': 'Okänd',
+
+    'home.createHeading': 'Skapa ett nytt knytis',
+    'home.occasionLabel': 'Vad är tillfället?',
+    'home.occasionPlaceholder': 't.ex. fredagsmiddag',
+    'home.dateOptional': 'Datum (valfritt)',
+    'home.timeOptional': 'Tid (valfritt)',
+    'home.yourName': 'Ditt namn',
+    'home.namePlaceholder': 't.ex. Mel',
+    'home.creating': 'Skapar...',
+    'home.create': 'Skapa',
+    'home.createError': 'Kunde inte skapa tillfället. Försök igen.',
+    'home.untitledOccasion': 'Namnlöst tillfälle',
+    'home.joinHeading': 'Använd kod',
+    'home.joinPlaceholder': 't.ex. ABC123',
+    'home.join': 'Gå med',
+
+    'join.title': 'Gå med på ett tillfälle',
+    'join.code': 'Kod',
+    'join.codePlaceholder': 't.ex. DEMO42',
+    'join.noOccasionForCode': 'Inget tillfälle med den här koden.',
+    'join.enterCodeAndName': 'Ange både kod och ditt namn.',
+    'join.noOccasionFound': 'Inget tillfälle med den koden.',
+    'join.couldNotJoin': 'Kunde inte gå med. Försök igen.',
+    'join.iAm': 'Jag är...',
+    'join.someoneElse': 'Någon annan',
+    'join.joining': 'Går med...',
+    'join.join': 'Gå med',
+
+    'occasion.inviteAria': 'Bjud in',
+
+    'notFound.title': 'Sidan hittades inte',
+    'notFound.subtitle': 'Den här sökvägen finns inte i appen.',
+    'notFound.returnHome': 'Till startsidan',
+
+    'contrib.sortParticipant': 'Namn',
+    'contrib.sortItem': 'Artikel',
+    'contrib.notes': 'Anteckningar',
+    'contrib.empty': 'Inga artiklar än',
+    'contrib.notesPlaceholder': 'Anteckningar',
+    'contrib.notesOptional': 'Anteckningar (valfritt)',
+    'contrib.itemPlaceholder': 'Artikel...',
+    'contrib.adding': '...',
+    'contrib.addingFor': 'Lägger till åt {{name}}',
+    'contrib.you': 'Du',
+    'contrib.youTag': '(du)',
+    'contrib.addForSomeoneTitle': 'Klicka för att lägga till åt någon annan',
+    'contrib.saveTitle': 'Spara',
+    'contrib.cancelTitle': 'Avbryt',
+    'contrib.editTitle': 'Redigera',
+    'contrib.deleteTitle': 'Ta bort',
+    'contrib.deleteConfirmTitle': 'Klicka igen för att bekräfta',
+
+    'addPerson.toggle': 'Lägg till person',
+    'addPerson.namePlaceholder': 'Namn...',
+    'addPerson.add': 'Lägg till',
+    'addPerson.cancel': 'Avbryt',
+
+    'participant.sectionLabel': 'Deltagare',
+    'participant.joined': '{{count}} har gått med',
+    'participant.ready': 'Redo att bidra',
+
+    'suggestion.sectionLabel': 'Förslag',
+    'suggestion.heading': 'Anonyma idéer',
+    'suggestion.placeholder': 'Kanske någon kan ta med is',
+    'suggestion.suggest': 'Föreslå',
+    'suggestion.empty': 'Inga förslag än.',
+
+    'invite.title': 'Bjud in',
+    'invite.closeAria': 'Stäng',
+    'invite.hint': 'Skanna för att gå med, eller dela länken nedan',
+    'invite.orManual': 'Eller ange koden manuellt:',
+
+    'switcher.title': 'Byt tillfälle',
+    'switcher.label': 'Andra knytisar',
+    'switcher.newOrJoin': 'Nytt eller gå med...',
+
+    'language.ariaSv': 'Svenska',
+    'language.ariaEn': 'Engelska',
+    'language.switchLabel': 'Språk',
+
+    'meta.description':
+      'Knytis hjälper grupper att koordinera mat och dryck till ett tillfälle.',
+  },
+);
+
+export type MessageKey = keyof typeof enMessages;
+
+export const messagesByLocale: Record<Locale, Record<MessageKey, string>> = {
+  en: enMessages,
+  sv: svMessages,
+};
