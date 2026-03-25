@@ -1,10 +1,8 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// GitHub Pages project URL: https://<user>.github.io/<repo>/
-const repo = 'knytis';
-
-export default defineConfig(({ mode }) => ({
-  base: mode === 'github-pages' ? `/${repo}/` : '/',
+// Custom domain — always served from root regardless of build mode.
+export default defineConfig({
+  base: '/',
   plugins: [react()],
-}));
+});
