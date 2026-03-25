@@ -12,7 +12,7 @@ export function AppShell({ title, subtitle, aside, children }: AppShellProps) {
   return (
     <div className="app-shell">
       <header className="hero-card">
-        <div>
+        <div className="hero-body">
           <div className="hero-title-row">
             <h1>{title}</h1>
             <OccasionSwitcher />
