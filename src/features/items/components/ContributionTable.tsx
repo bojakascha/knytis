@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useI18n } from '../../../i18n/useI18n';
 import type { AddItemValues, ContributionItem, Participant, SortMode } from '../../../types/models';
 
@@ -49,6 +49,9 @@ export function ContributionTable({
   const [activeRowId, setActiveRowId] = useState<string | null>(null);
   const tableRef = useRef<HTMLTableElement>(null);
 
+  // Expanded note row
+  const [expandedNoteId, setExpandedNoteId] = useState<string | null>(null);
+
   // Edit state
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editName, setEditName] = useState('');
@@ -93,7 +96,9 @@ export function ContributionTable({
     return copy;
   }, [items, sortMode, getParticipantName]);
 
-  const hasNotes = items.some((item) => item.notes) || editingId !== null;
+  const toggleNote = (itemId: string) => {
+    setExpandedNoteId((prev) => (prev === itemId ? null : itemId));
+  };
 
   const handleRowTap = (item: ContributionItem) => {
     setActiveRowId((prev) => (prev === item.id ? null : item.id));
@@ -102,6 +107,7 @@ export function ContributionTable({
 
   const startEdit = (item: ContributionItem) => {
     setActiveRowId(null);
+    setExpandedNoteId(null);
     setEditingId(item.id);
     setEditName(item.name);
     setEditNotes(item.notes);
@@ -207,117 +213,141 @@ export function ContributionTable({
                   {t('contrib.sortItem')}
                 </button>
               </th>
-              {hasNotes ? <th>{t('contrib.notes')}</th> : null}
               <th className="col-actions" />
             </tr>
           </thead>
           <tbody>
             {sortedItems.length === 0 ? (
               <tr>
-                <td colSpan={hasNotes ? 4 : 3} className="empty-copy">
+                <td colSpan={3} className="empty-copy">
                   {t('contrib.empty')}
                 </td>
               </tr>
             ) : (
               sortedItems.map((item) =>
                 editingId === item.id ? (
-                  <tr key={item.id} className="editing-row">
-                    <td className="muted">
-                      {getParticipantName(item.participantId)}
-                    </td>
-                    <td>
-                      <input
-                        ref={editNameRef}
-                        className="edit-cell"
-                        value={editName}
-                        onChange={(e) => setEditName(e.target.value)}
-                        onKeyDown={handleEditKeyDown}
-                      />
-                    </td>
-                    {hasNotes ? (
+                  <Fragment key={item.id}>
+                    <tr className="editing-row">
+                      <td className="muted">
+                        {getParticipantName(item.participantId)}
+                      </td>
                       <td>
                         <input
-                          className="edit-cell edit-cell-notes"
+                          ref={editNameRef}
+                          className="edit-cell"
+                          value={editName}
+                          onChange={(e) => setEditName(e.target.value)}
+                          onKeyDown={handleEditKeyDown}
+                        />
+                      </td>
+                      <td className="col-actions">
+                        <div className="row-actions">
+                          <button
+                            type="button"
+                            className="action-btn save-btn"
+                            onClick={saveEdit}
+                            title={t('contrib.saveTitle')}
+                          >
+                            {t('common.save')}
+                          </button>
+                          <button
+                            type="button"
+                            className="action-btn cancel-btn"
+                            onClick={cancelEdit}
+                            title={t('contrib.cancelTitle')}
+                          >
+                            {t('common.cancel')}
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr className="edit-notes-row">
+                      <td colSpan={3}>
+                        <input
+                          className="edit-cell"
                           value={editNotes}
                           onChange={(e) => setEditNotes(e.target.value)}
                           onKeyDown={handleEditKeyDown}
                           placeholder={t('contrib.notesPlaceholder')}
                         />
                       </td>
-                    ) : null}
-                    <td className="col-actions">
-                      <div className="row-actions">
-                        <button
-                          type="button"
-                          className="action-btn save-btn"
-                          onClick={saveEdit}
-                          title={t('contrib.saveTitle')}
-                        >
-                          {t('common.save')}
-                        </button>
-                        <button
-                          type="button"
-                          className="action-btn cancel-btn"
-                          onClick={cancelEdit}
-                          title={t('contrib.cancelTitle')}
-                        >
-                          {t('common.cancel')}
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
+                    </tr>
+                  </Fragment>
                 ) : (
-                  <tr
-                    key={item.id}
-                    className={`item-row${activeRowId === item.id ? ' row-active' : ''}`}
-                    onClick={() => handleRowTap(item)}
-                  >
-                    <td>{getParticipantName(item.participantId)}</td>
-                    <td>{item.name}</td>
-                    {hasNotes ? <td className="muted">{item.notes || ''}</td> : null}
-                    <td className="col-actions">
-                      <div className="hover-actions">
-                        <button
-                          type="button"
-                          className="icon-btn"
-                          onClick={(e) => { e.stopPropagation(); startEdit(item); }}
-                          title={t('contrib.editTitle')}
-                        >
-                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
-                            <path d="m15 5 4 4" />
-                          </svg>
-                        </button>
-                        <button
-                          type="button"
-                          className="icon-btn icon-btn-danger"
-                          onClick={(e) => { e.stopPropagation(); handleDelete(item.id); }}
-                          title={
-                            confirmDeleteId === item.id
-                              ? t('contrib.deleteConfirmTitle')
-                              : t('contrib.deleteTitle')
-                          }
-                        >
-                          {confirmDeleteId === item.id ? (
-                            <span className="confirm-label">{t('common.sure')}</span>
-                          ) : (
+                  <Fragment key={item.id}>
+                    <tr
+                      className={`item-row${activeRowId === item.id ? ' row-active' : ''}`}
+                      onClick={() => handleRowTap(item)}
+                    >
+                      <td>{getParticipantName(item.participantId)}</td>
+                      <td>
+                        <span className="item-name-cell">
+                          <span>{item.name}</span>
+                          {item.notes ? (
+                            <button
+                              type="button"
+                              className={`note-toggle${expandedNoteId === item.id ? ' note-toggle-open' : ''}`}
+                              onClick={(e) => { e.stopPropagation(); toggleNote(item.id); }}
+                              title={t('contrib.notes')}
+                            >
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                              </svg>
+                            </button>
+                          ) : null}
+                        </span>
+                      </td>
+                      <td className="col-actions">
+                        <div className="hover-actions">
+                          <button
+                            type="button"
+                            className="icon-btn"
+                            onClick={(e) => { e.stopPropagation(); startEdit(item); }}
+                            title={t('contrib.editTitle')}
+                          >
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M3 6h18" />
-                              <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-                              <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                              <path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+                              <path d="m15 5 4 4" />
                             </svg>
-                          )}
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
+                          </button>
+                          <button
+                            type="button"
+                            className="icon-btn icon-btn-danger"
+                            onClick={(e) => { e.stopPropagation(); handleDelete(item.id); }}
+                            title={
+                              confirmDeleteId === item.id
+                                ? t('contrib.deleteConfirmTitle')
+                                : t('contrib.deleteTitle')
+                            }
+                          >
+                            {confirmDeleteId === item.id ? (
+                              <span className="confirm-label">{t('common.sure')}</span>
+                            ) : (
+                              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M3 6h18" />
+                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                              </svg>
+                            )}
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    {expandedNoteId === item.id && item.notes ? (
+                      <tr className="note-expand-row">
+                        <td colSpan={3}>
+                          <p className="note-content">{item.notes}</p>
+                        </td>
+                      </tr>
+                    ) : null}
+                  </Fragment>
                 ),
               )
             )}
           </tbody>
           <tfoot>
             <tr>
-              <td colSpan={hasNotes ? 4 : 3} style={{ padding: 0, border: 'none' }}>
+              <td colSpan={3} style={{ padding: 0, border: 'none' }}>
                 <form
                   className={`add-row${isAddingForOther ? ' add-row-other' : ''}`}
                   onSubmit={handleSubmit}

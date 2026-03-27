@@ -1,0 +1,22 @@
+{
+  "name": "Knytis",
+  "short_name": "Knytis",
+  "description": "Koordinera mat och dryck till ditt knytis.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#090d17",
+  "theme_color": "#101625",
+  "icons": [
+    {
+      "src": "/icon_192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon_512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
