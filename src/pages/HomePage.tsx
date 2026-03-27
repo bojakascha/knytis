@@ -1,12 +1,17 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AppShell } from '../components/layout/AppShell';
-import { createOccasion } from '../features/occasion/services/occasionRepository';
+import {
+  createOccasion,
+  getKnownOccasionsAsync,
+  type KnownOccasion,
+} from '../features/occasion/services/occasionRepository';
 import { useI18n } from '../i18n/useI18n';
 
 export function HomePage() {
   const { t } = useI18n();
   const navigate = useNavigate();
+  const [knownOccasions, setKnownOccasions] = useState<KnownOccasion[]>([]);
   const [title, setTitle] = useState('');
   const [hostName, setHostName] = useState('');
   const [date, setDate] = useState('');
@@ -14,6 +19,10 @@ export function HomePage() {
   const [joinCode, setJoinCode] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    getKnownOccasionsAsync().then(setKnownOccasions);
+  }, []);
 
   const handleCreate = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -38,10 +47,44 @@ export function HomePage() {
     }
   };
 
+  const hasKnown = knownOccasions.length > 0;
+
   return (
     <AppShell title="Knytis">
+      {hasKnown && (
+        <section className="panel panel-wide">
+          <h2>{t('home.knownHeading')}</h2>
+          <ul className="known-occasions-list">
+            {knownOccasions.map((o) => (
+              <li key={o.code}>
+                <Link to={`/occasion/${o.code}`} className="known-occasion-item">
+                  <span className="known-occasion-title">{o.title}</span>
+                  <span className="known-occasion-code">{o.code}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       <section className="panel panel-wide">
-        <h2>{t('home.createHeading')}</h2>
+        <h2 className={hasKnown ? 'secondary-heading' : undefined}>{t('home.joinHeading')}</h2>
+        <div className="join-row">
+          <input
+            value={joinCode}
+            onChange={(event) => setJoinCode(event.target.value.toUpperCase())}
+            placeholder={t('home.joinPlaceholder')}
+          />
+          <Link className="button-link" to={`/join?code=${joinCode}`}>
+            {t('home.join')}
+          </Link>
+        </div>
+      </section>
+
+      <section className="panel panel-wide">
+        <h2 className={hasKnown ? 'secondary-heading' : undefined}>
+          {t(hasKnown ? 'home.createNewHeading' : 'home.createHeading')}
+        </h2>
         <form className="form-grid" onSubmit={handleCreate}>
           <label>
             <span>{t('home.occasionLabel')}</span>
@@ -86,20 +129,6 @@ export function HomePage() {
           <button type="submit">{isSubmitting ? t('home.creating') : t('home.create')}</button>
         </form>
         {error ? <p className="error-text">{error}</p> : null}
-      </section>
-
-      <section className="panel panel-wide">
-        <h2>{t('home.joinHeading')}</h2>
-        <div className="join-row">
-          <input
-            value={joinCode}
-            onChange={(event) => setJoinCode(event.target.value.toUpperCase())}
-            placeholder={t('home.joinPlaceholder')}
-          />
-          <Link className="button-link" to={`/join?code=${joinCode}`}>
-            {t('home.join')}
-          </Link>
-        </div>
       </section>
     </AppShell>
   );

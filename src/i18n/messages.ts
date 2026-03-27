@@ -30,9 +30,11 @@ export const { en: enMessages, sv: svMessages } = defineMessages(
     'home.create': 'Create',
     'home.createError': 'Could not create the occasion. Please try again.',
     'home.untitledOccasion': 'Untitled occasion',
+    'home.knownHeading': 'Your occasions',
     'home.joinHeading': 'Join with a code',
     'home.joinPlaceholder': 'e.g. ABC123',
     'home.join': 'Join',
+    'home.createNewHeading': 'Create a new occasion',
 
     'join.title': 'Join an occasion',
     'join.code': 'Code',
@@ -126,9 +128,11 @@ export const { en: enMessages, sv: svMessages } = defineMessages(
     'home.create': 'Skapa',
     'home.createError': 'Kunde inte skapa tillfället. Försök igen.',
     'home.untitledOccasion': 'Namnlöst tillfälle',
+    'home.knownHeading': 'Dina tillfällen',
     'home.joinHeading': 'Använd kod',
     'home.joinPlaceholder': 't.ex. ABC123',
     'home.join': 'Gå med',
+    'home.createNewHeading': 'Skapa ett nytt knytis',
 
     'join.title': 'Gå med på ett tillfälle',
     'join.code': 'Kod',
